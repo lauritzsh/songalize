@@ -67,7 +67,7 @@ defmodule Songalize.Song do
     end
   end
 
-  def check_with(metadata) do
+  def check_title_with(metadata) do
     pattern = ~r/(?:\(|\[)with (.+?)(?:\)|\])/i
 
     case Regex.run(pattern, metadata.title) do
@@ -75,6 +75,25 @@ defmodule Songalize.Song do
         metadata
         |> Map.put(:with, feat)
         |> Map.update!(:title, fn(t) ->
+          pattern
+          |> Regex.replace(t, "")
+          |> String.trim
+        end)
+
+      nil ->
+        metadata
+        |> Map.put_new(:with, false)
+    end
+  end
+
+  def check_artist_with(metadata) do
+    pattern = ~r/\s+with (.+?)/i
+
+    case Regex.run(pattern, metadata.artist) do
+      [_match, feat] ->
+        metadata
+        |> Map.put(:with, feat)
+        |> Map.update!(:artist, fn(t) ->
           pattern
           |> Regex.replace(t, "")
           |> String.trim
@@ -148,7 +167,8 @@ defmodule Songalize.Song do
     |> check_artist_feat
     |> proper_join_artists
     |> check_feat
-    |> check_with
+    |> check_title_with
+    |> check_artist_with
     |> check_remix
   end
 

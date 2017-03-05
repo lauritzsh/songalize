@@ -351,5 +351,27 @@ defmodule SongalizeTest do
     }
 
     assert ^song = expected
+
+    song = %{title: "A", album: "B", artist: "C with X"}
+    |> Songalize.Song.normalize
+
+    expected = %{
+      title: "A",
+      album: "B",
+      artist: "C x X",
+    }
+
+    assert ^song = expected
+
+    song = %{title: "A", album: "B", artist: "C with X Featuring Y"}
+    |> Songalize.Song.normalize
+
+    expected = %{
+      title: "A (feat. Y)",
+      album: "B",
+      artist: "C x X",
+    }
+
+    assert ^song = expected
   end
 end
