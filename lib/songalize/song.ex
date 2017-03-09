@@ -128,7 +128,7 @@ defmodule Songalize.Song do
       pattern = ~r/\s*(,| x )\s*/
 
       Regex.split(pattern, a)
-      |> Enum.join(" x ")
+      |> Enum.join(" & ")
     end)
   end
 
@@ -213,7 +213,7 @@ defmodule Songalize.Song do
     artist = case cleaned_metadata do
       %{artist: artist, with: false} -> artist
 
-      %{artist: artist, with: with} -> "#{artist} x #{with}"
+      %{artist: artist, with: with} -> "#{artist} & #{with}"
     end
 
     metadata

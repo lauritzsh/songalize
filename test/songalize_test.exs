@@ -189,14 +189,14 @@ defmodule SongalizeTest do
     assert ^song = expected
   end
 
-  test "will join artists with x" do
+  test "will join artists with &" do
     song = %{title: "A", album: "B", artist: "C, D"}
     |> Songalize.Song.proper_join_artists
 
     expected = %{
       title: "A",
       album: "B",
-      artist: "C x D",
+      artist: "C & D",
     }
 
     assert ^song = expected
@@ -347,7 +347,7 @@ defmodule SongalizeTest do
     expected = %{
       title: "A",
       album: "B",
-      artist: "C x X",
+      artist: "C & X",
     }
 
     assert ^song = expected
@@ -358,7 +358,7 @@ defmodule SongalizeTest do
     expected = %{
       title: "A",
       album: "B",
-      artist: "C x X",
+      artist: "C & X",
     }
 
     assert ^song = expected
@@ -369,7 +369,7 @@ defmodule SongalizeTest do
     expected = %{
       title: "A (feat. Y)",
       album: "B",
-      artist: "C x X",
+      artist: "C & X",
     }
 
     assert ^song = expected
