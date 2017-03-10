@@ -176,34 +176,35 @@ defmodule Songalize.Song do
     cleaned_metadata = clean_metadata(metadata)
 
     title = case cleaned_metadata do
-      %{title: title, remix: false, feat: false, radio_edit: false} -> title
+      %{title: title, remix: false, feat: false, radio_edit: false} ->
+        title_capitalize(title)
 
       %{title: title, remix: false, feat: false, radio_edit: true} ->
-        "#{title} (Radio Edit)"
+        "#{title_capitalize(title)} (Radio Edit)"
 
       %{title: title, remix: false, feat: feat, radio_edit: true} ->
-        "#{title} (feat. #{feat}) [Radio Edit]"
+        "#{title_capitalize(title)} (feat. #{feat}) [Radio Edit]"
 
       %{title: title, remix: false, feat: feat, radio_edit: false} ->
-        "#{title} (feat. #{feat})"
+        "#{title_capitalize(title)} (feat. #{feat})"
 
       %{title: title, remix: "artist_remix", feat: false, radio_edit: true} ->
-        "#{title} (Remix) [Radio Edit]"
+        "#{title_capitalize(title)} (Remix) [Radio Edit]"
 
       %{title: title, remix: "artist_remix", feat: false, radio_edit: false} ->
-        "#{title} (Remix)"
+        "#{title_capitalize(title)} (Remix)"
 
       %{title: title, remix: remix, feat: false, radio_edit: true} ->
-        "#{title} (#{remix} Remix) [Radio Edit]"
+        "#{title_capitalize(title)} (#{remix} Remix) [Radio Edit]"
 
       %{title: title, remix: remix, feat: false, radio_edit: false} ->
-        "#{title} (#{remix} Remix)"
+        "#{title_capitalize(title)} (#{remix} Remix)"
 
       %{title: title, remix: "artist_remix", feat: feat, radio_edit: _} ->
-        "#{title} (feat. #{feat}) [Remix]"
+        "#{title_capitalize(title)} (feat. #{feat}) [Remix]"
 
       %{title: title, remix: remix, feat: feat, radio_edit: _} ->
-        "#{title} (feat. #{feat}) [#{remix} Remix]"
+        "#{title_capitalize(title)} (feat. #{feat}) [#{remix} Remix]"
     end
 
     # album = case cleaned_metadata do
@@ -255,5 +256,15 @@ defmodule Songalize.Song do
     {_output, 0} = System.cmd("id3v2", [path, "--song", title])
     # {_output, 0} = System.cmd("id3v2", [path, "--album", album])
     {_output, 0} = System.cmd("id3v2", [path, "--artist", artist])
+  end
+
+  defp title_capitalize(title) do
+    title
+    |> String.split(" ")
+    |> Enum.map(fn(w) ->
+      {l, rw} = String.split_at(w, 1)
+      String.upcase(l) <> rw
+    end)
+    |> Enum.join(" ")
   end
 end

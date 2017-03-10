@@ -219,6 +219,30 @@ defmodule SongalizeTest do
     assert ^song = expected
   end
 
+  test "will uppercase title" do
+    song = %{title: "Abc xyz", album: "B", artist: "C"}
+    |> Songalize.Song.normalize
+
+    expected = %{
+      title: "Abc Xyz",
+      album: "B",
+      artist: "C",
+    }
+
+    assert ^song = expected
+
+    song = %{title: "ABC xyz", album: "B", artist: "C"}
+    |> Songalize.Song.normalize
+
+    expected = %{
+      title: "ABC Xyz",
+      album: "B",
+      artist: "C",
+    }
+
+    assert ^song = expected
+  end
+
   test "can normalize songs" do
     song = %{title: "A [radio edit]", album: "B", artist: "C"}
     |> Songalize.Song.normalize
